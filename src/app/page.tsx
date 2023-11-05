@@ -2,10 +2,12 @@
 
 import WorldMap from "@/modules/WorldMap";
 import geoJson from '@/modules/geo_json/countries-110m.json';
+import Menu from "./components/Menu";
 
 export default function Home() {
   return (
-    <main className="flex">
+    <main className="flex">      
+      <Menu/>
       <WorldMap
         projectionConfig={{
           rotate: [-10, 0, 0],
@@ -13,7 +15,7 @@ export default function Home() {
         }}
         geoJson={geoJson}
         convertGeoId={false}
-      />
+      />      
     </main>
   )
 }
