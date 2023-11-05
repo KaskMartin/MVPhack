@@ -1,16 +1,17 @@
-import { ComposableMap, Geographies, Geography, Sphere } from 'react-simple-maps';
+import { ComposableMap, Geographies, Geography, ProjectionConfig } from 'react-simple-maps';
 
-import geoJson from './countries-110m.json';
+
 import { scaleLinear } from 'd3-scale';
 import { useEffect, useState } from "react";
 import { CountryData, DataPointType } from "@/app/api/data/types";
 import YearSlider from '@/app/components/YearSlider';
 import Dropdown from '@/app/components/Dropdown';
 import Modal from '@/app/components/Modal';
+import { alpha2ToNumeric, getNumericCodes } from "i18n-iso-countries";
 import somalia from '@/app/somalia.png';
 
 
-const WorldMap = () => {
+const WorldMap = ({ projectionConfig, geoJson, convertGeoId = false }: { projectionConfig: ProjectionConfig, geoJson: Record<string, any>, convertGeoId: boolean}) => {
   const [countries, setCountries] = useState<CountryData[]>([]);
   const [year, setYear] = useState<number>(2020);
   const [dataKey, setDataKey] = useState<DataPointType>('gdp');
@@ -94,16 +95,16 @@ const WorldMap = () => {
           onOptionChange={handleOptionChange}
         />
       </div>
-      <ComposableMap projectionConfig={{
-        rotate: [-10, 0, 0],
-        scale: 147
-      }}>
+      <ComposableMap projectionConfig={projectionConfig}>
         {/*@ts-ignore */}
         <Geographies geography={geoJson}>
           {({ geographies }) =>
             geographies.map((geo) => {
-              const countryData = countries[geo.id];
-              console.log(countryData);
+              let geoId = geo.id;
+              if (convertGeoId) {
+                geoId = alpha2ToNumeric(geoId);
+              }
+              const countryData = countries[geoId];
               // @ts-ignore
               const dataPoint: number = countryData && countryData.data && countryData.data[year] && countryData.data[year][dataKey];
 
@@ -117,7 +118,7 @@ const WorldMap = () => {
                 geography={geo}
                 className="Geography"
                 fill={dataPoint ? colorScale(dataPoint) : "#85868a"}
-                onClick={() => handleMapClick(geo.id)}
+                onClick={() => handleMapClick(geoId)}
               />
               )
             })
