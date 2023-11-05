@@ -124,7 +124,7 @@ const WorldMap = () => {
           }
         </Geographies>
       </ComposableMap>
-      <Modal isOpen={isModalOpen} onClose={closeModal} title={geoId && countries[geoId] && countries[geoId].name ? countries[geoId].name : 'Data'}>
+      <Modal isOpen={isModalOpen} onClose={closeModal} title={(geoId && countries[geoId] && countries[geoId].name) ? countries[geoId].name : (geoId == 706 ? 'Somalia' : 'Data')}>
         {
           // @ts-ignore
           (geoId && countries[geoId]) ? (<CountryModalData data={countries[geoId].data[year]} />) : (geoId == 706 ? <Somalia /> : <></>)
