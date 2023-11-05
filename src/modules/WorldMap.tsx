@@ -8,14 +8,14 @@ import YearSlider from '@/app/components/YearSlider';
 import Dropdown from '@/app/components/Dropdown';
 import Modal from '@/app/components/Modal';
 import { alpha2ToNumeric, getNumericCodes } from "i18n-iso-countries";
-
+import somalia from '@/app/somalia.png';
 
 
 const WorldMap = ({ projectionConfig, geoJson, convertGeoId = false }: { projectionConfig: ProjectionConfig, geoJson: Record<string, any>, convertGeoId: boolean}) => {
   const [countries, setCountries] = useState<CountryData[]>([]);
   const [year, setYear] = useState<number>(2020);
   const [dataKey, setDataKey] = useState<DataPointType>('gdp');
-  const [maxScale, setMaxScale ] = useState<number>(10000);
+  const [maxScale, setMaxScale] = useState<number>(10000);
   const [geoId, setGeoId] = useState<number>(1);
   const minYear = 1998;
   const maxYear = 2023;
@@ -50,7 +50,6 @@ const WorldMap = ({ projectionConfig, geoJson, convertGeoId = false }: { project
     setMaxScale(maxValues[dataKey])
   };
 
-  //TODO onclick function
   const handleMapClick = (geoId: number) => {
     setGeoId(geoId);
     closeModal();
@@ -129,7 +128,7 @@ const WorldMap = ({ projectionConfig, geoJson, convertGeoId = false }: { project
       <Modal isOpen={isModalOpen} onClose={closeModal} title={geoId && countries[geoId] && countries[geoId].name ? countries[geoId].name : 'Data'}>
         {
           // @ts-ignore
-          geoId && countries[geoId] && (<CountryModalData data={countries[geoId].data[year]}/>)
+          (geoId && countries[geoId]) ? (<CountryModalData data={countries[geoId].data[year]} />) : (geoId == 706 ? <Somalia /> : <></>)
         }
       </Modal>
     </>
@@ -141,10 +140,19 @@ const CountryModalData = (data: CountryData) => {
 
   return (<div>
     <p>GDP: {d.gdp || ''}</p>
-    <p>ARA: {d.ara  || ''}</p>
-    <p>CROP: {d.crop  || ''}</p>
+    <p>ARA: {d.ara || ''}</p>
+    <p>CROP: {d.crop || ''}</p>
     <p>Emigrants: {d.emigrants || ''}</p>
     <p>Emigration by country:{JSON.stringify(d.immigrationTo)}</p>
+  </div>);
+}
+
+const Somalia = () => {
+
+  return (<div>
+    <div>
+      <img src={somalia.src} alt="Somalia data" />
+    </div>
   </div>);
 }
 
