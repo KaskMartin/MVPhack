@@ -11,7 +11,7 @@ import { alpha2ToNumeric, getNumericCodes } from "i18n-iso-countries";
 import somalia from '@/app/somalia.png';
 
 
-const WorldMap = ({ projectionConfig, geoJson, convertGeoId = false }: { projectionConfig: ProjectionConfig, geoJson: Record<string, any>, convertGeoId: boolean}) => {
+const WorldMap = ({ projectionConfig, geoJson, convertGeoId = false }: { projectionConfig: ProjectionConfig, geoJson: Record<string, any>, convertGeoId: boolean }) => {
   const [countries, setCountries] = useState<CountryData[]>([]);
   const [year, setYear] = useState<number>(2020);
   const [dataKey, setDataKey] = useState<DataPointType>('gdp');
@@ -125,7 +125,7 @@ const WorldMap = ({ projectionConfig, geoJson, convertGeoId = false }: { project
           }
         </Geographies>
       </ComposableMap>
-      <Modal isOpen={isModalOpen} onClose={closeModal} title={geoId && countries[geoId] && countries[geoId].name ? countries[geoId].name : 'Data'}>
+      <Modal isOpen={isModalOpen} onClose={closeModal} title={(geoId && countries[geoId] && countries[geoId].name) ? countries[geoId].name : (geoId == 706 ? 'Somalia' : 'Data')}>
         {
           // @ts-ignore
           (geoId && countries[geoId]) ? (<CountryModalData data={countries[geoId].data[year]} />) : (geoId == 706 ? <Somalia /> : <></>)
